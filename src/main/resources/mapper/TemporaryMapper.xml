@@ -10,29 +10,22 @@
                REGI_DTTM TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- 생성일자
                FINAL_MOD_USER_ID VARCHAR(255),                     -- 매대 위치 (예: "1층 A구역")
                FINAL_MOD_DTTM TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- 수정일자
+               )
     </insert>
     <insert id="insertShelfTemporary">
         INSERT INTO tempTable
-            (
-            SHELF_NO
-          , SHELF_NM
-          , REGI_USER_ID
-          , REGI_DTTM
-          , FINAL_MOD_USER_ID
-          , FINAL_MOD_DTTM
-            )
-            VALUES
-            (
-             <foreach collection="inVos" item="el" separator="UNION ALL">
-            SELECT #{el.shelfNo}
-                 , #{el.shelfNm}
-                 , #{el.regiUserId}
-                 , SYSDATE
-                 , #{el.finalModUserId}
-                 , SYSDATE
-              FROM DAUL
-             </foreach>
-            )
+        (
+        SHELF_NO,
+        SHELF_NM,
+        REGI_USER_ID,
+        REGI_DTTM,
+        FINAL_MOD_USER_ID,
+        FINAL_MOD_DTTM
+        )
+        VALUES
+        <foreach collection="inVos" item="el" separator=",">
+            (#{el.shelfNo}, #{el.shelfNm}, #{el.regiUserId}, SYSDATE(), #{el.finalModUserId}, SYSDATE())
+        </foreach>
     </insert>
     <select id="selectTemporaryData"
     resultType="covy.temporary.model.vo.TemporaryInVo">

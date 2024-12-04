@@ -1,25 +1,23 @@
 package covy.temporary.service;
 
-import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@SpringBootTest
-class TemporaryServiceTest {
+@SpringBootTest // Spring Boot 테스트 컨텍스트 로드
+class TemperaryServiceTest {
 
     private final TemperaryService temporaryService;
 
     @Autowired
-    public TemporaryServiceTest(TemperaryService temporaryService) {
+    public TemperaryServiceTest(TemperaryService temporaryService) {
         this.temporaryService = temporaryService;
     }
 
     @Test
     void findTemporary() {
         var result = temporaryService.findTemporary();
-        assertNotNull(result); // 예제: 테스트 로직
+        Assertions.assertNotNull(result); // 결과 값이 null이 아닌지 확인
     }
 }

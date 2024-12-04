@@ -24,7 +24,8 @@ public class TemperaryService {
 
         for (int i = 100; i < 999; i++) {
             TemporaryInVo temp = new TemporaryInVo();
-            temp.setShelfNm(i + toString());
+            // i를 3자리로 포맷팅
+            temp.setShelfNo(String.format("%03d", i));  // "001", "002" 형태로 만들어짐
             temp.setShelfNm(i + "매대");
             temp.setRegiUserId("covy");
             temp.setFinalModUserId("covy");
