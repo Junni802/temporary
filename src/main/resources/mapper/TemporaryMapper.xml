@@ -4,7 +4,7 @@
 <mapper namespace="covy.temporary.mapper.TemporaryMapper">
     <insert id="createTemporaryTable">
         CREATE TEMPORARY TABLE tempTable (
-               SHELF_NO VARCHAR(3) PRIMARY KEY,   -- 매대번호 (고유 식별자)
+               SHELF_NO VARCHAR(5) PRIMARY KEY,   -- 매대번호 (고유 식별자)
                SHELF_NM VARCHAR(50) NOT NULL,                 -- 매대단 번호
                REGI_USER_ID VARCHAR(255),                     -- 매대 위치 (예: "1층 A구역")
                REGI_DTTM TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- 생성일자
@@ -27,9 +27,67 @@
             (#{el.shelfNo}, #{el.shelfNm}, #{el.regiUserId}, SYSDATE(), #{el.finalModUserId}, SYSDATE())
         </foreach>
     </insert>
+    <insert id="tempInShelf">
+        INSERT INTO COVY_SHELF
+        (
+            SHELF_NO,
+            SHELF_NM,
+            REGI_USER_ID,
+            REGI_DTTM,
+            FINAL_MOD_USER_ID,
+            FINAL_MOD_DTTM
+        )
+ SELECT SHELF_NO,
+        SHELF_NM,
+        REGI_USER_ID,
+        REGI_DTTM,
+        FINAL_MOD_USER_ID,
+        FINAL_MOD_DTTM
+   FROM tempTable
+    </insert>
     <select id="selectTemporaryData"
     resultType="covy.temporary.model.vo.TemporaryInVo">
         SELECT *
-          FROM tempTable
+          FROM COVY_SHELF
     </select>
+    <insert id="insertShelf">
+        INSERT INTO COVY_SHELF
+        (
+        SHELF_NO,
+        SHELF_NM,
+        REGI_USER_ID,
+        REGI_DTTM,
+        FINAL_MOD_USER_ID,
+        FINAL_MOD_DTTM
+        )
+        VALUES
+        (
+        #{shelfNo}
+      , #{shelfNm}
+      , #{regiUserId}
+      , SYSDATE()
+      , #{finalModUserId}
+      , SYSDATE()
+        )
+    </insert>
+    <insert id="insertShelfList">
+        INSERT INTO COVY_SHELF
+        (
+        SHELF_NO,
+        SHELF_NM,
+        REGI_USER_ID,
+        REGI_DTTM,
+        FINAL_MOD_USER_ID,
+        FINAL_MOD_DTTM
+        )
+        <foreach collection="inVos" item="el" separator="UNION ALL">
+  SELECT #{el.shelfNo}
+       , #{el.shelfNm}
+       , #{el.regiUserId}
+       , SYSDATE()
+       , #{el.finalModUserId}
+       , SYSDATE()
+    FROM DUAL
+        </foreach>
+    </insert>
 </mapper>

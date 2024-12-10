@@ -12,6 +12,12 @@ public interface TemporaryMapper {
 
     void insertShelfTemporary(List<TemporaryInVo> inVos);
 
+    void tempInShelf();
+
     List<TemporaryInVo> selectTemporaryData();
+
+    void insertShelf(TemporaryInVo inVo);
+
+    void insertShelfList(List<TemporaryInVo> inVos);
 
 }
